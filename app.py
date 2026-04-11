@@ -34,21 +34,24 @@ with open("data/news.json", "w") as f:
 # -----------------------
 # 3. Train Model
 # -----------------------
-df = pd.DataFrame(sample_data)
+# -----------------------
+# 3. Train Model (only once)
+# -----------------------
+if not os.path.exists("models/model.pkl"):
+    df = pd.DataFrame(sample_data)
 
-X = df["text"]
-y = df["label"]
+    X = df["text"]
+    y = df["label"]
 
-vectorizer = TfidfVectorizer()
-X_vec = vectorizer.fit_transform(X)
+    vectorizer = TfidfVectorizer()
+    X_vec = vectorizer.fit_transform(X)
 
-model = LogisticRegression()
-model.fit(X_vec, y)
+    model = LogisticRegression()
+    model.fit(X_vec, y)
 
-# Save model
-os.makedirs("models", exist_ok=True)
-joblib.dump(model, "models/model.pkl")
-joblib.dump(vectorizer, "models/vectorizer.pkl")
+    os.makedirs("models", exist_ok=True)
+    joblib.dump(model, "models/model.pkl")
+    joblib.dump(vectorizer, "models/vectorizer.pkl")
 
 # -----------------------
 # 4. Flask App
